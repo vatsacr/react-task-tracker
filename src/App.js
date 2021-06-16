@@ -1,34 +1,27 @@
 import Header from "./components/Header";
 import Tasks from "./components/Tasks";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import AddTask from "./components/AddTask";
 
 const App = () => {
-  const [tasks, setTasks] = useState([
-    {
-      id: 1,
-      name: "Clean room",
-      day: "February 6th at 5:30 PM",
-      reminder: "true",
-    },
-    {
-      id: 2,
-      name: "Remove trash",
-      day: "February 7th at 7:30 AM",
-      reminder: "true",
-    },
-    {
-      id: 3,
-      name: "Cook lunch",
-      day: "February 8th at 11:30 AM",
-      reminder: "true",
-    },
-  ]);
+  const [tasks, setTasks] = useState([]);
   const [toggleAddTask, setToggleAddTask] = useState(false);
+
+  useEffect(() => {
+    const getData = async () => {
+      const responseFromServer = await fetchData();
+      setTasks(responseFromServer);
+    };
+    getData();
+  }, []);
   const addTask = (task) => {
-    const id = Math.floor(Math.random() * 10000) + 1;
-    const newTask = { id, ...task };
-    setTasks([...tasks, newTask]);
+    setTasks([...tasks, task]);
+  };
+
+  const fetchData = async () => {
+    const response = await fetch("http://localhost:5200/tasks");
+    const data = await response.json();
+    return data;
   };
 
   const deleteTask = (id) => {
