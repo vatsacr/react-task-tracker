@@ -24,7 +24,7 @@ const App = () => {
       reminder: "true",
     },
   ]);
-
+  const [toggleAddTask, setToggleAddTask] = useState(false);
   const addTask = (task) => {
     const id = Math.floor(Math.random() * 10000) + 1;
     const newTask = { id, ...task };
@@ -34,10 +34,18 @@ const App = () => {
   const deleteTask = (id) => {
     setTasks(tasks.filter((item) => item.id !== id));
   };
+
+  const openAddTask = () => {
+    setToggleAddTask(!toggleAddTask);
+  };
   return (
     <div>
-      <Header title="Task Tracker" />
-      <AddTask onAdd={addTask} />
+      <Header
+        toggleAddTask={toggleAddTask}
+        title="Task Tracker"
+        onAdd={openAddTask}
+      />
+      {toggleAddTask && <AddTask onAdd={addTask} />}
       {tasks.length > 0 ? (
         <Tasks tasks={tasks} onDelete={deleteTask} />
       ) : (
