@@ -14,8 +14,15 @@ const App = () => {
     };
     getData();
   }, []);
-  const addTask = (task) => {
-    setTasks([...tasks, task]);
+
+  const addTask = async (task) => {
+    const response = await fetch("http://localhost:5200/tasks", {
+      method: "POST",
+      headers: { "Content-type": "application/json" },
+      body: JSON.stringify(task),
+    });
+    const data = await response.json();
+    setTasks([...tasks, data]);
   };
 
   const fetchData = async () => {
